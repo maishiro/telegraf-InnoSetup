@@ -39,11 +39,13 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 Name: "program"; Description: "Program Files"; Types: full custom; Flags: fixed
 Name: "program\exec"; Description: "config exec-file"; Types: full custom
 Name: "program\fileexec"; Description: "config fileexec-file"; Types: full custom
+Name: "program\WinHost"; Description: "config WinHost"; Types: full custom
 
 [Files]
 Source: "module\telegraf.exe"; DestDir: "{app}"; Components: program
 Source: "module\telegraf-1.conf"; DestDir: "{app}"; Components: program\exec
 Source: "module\telegraf-2.conf"; DestDir: "{app}"; Components: program\fileexec
+Source: "module\telegraf-WinHost.conf"; DestDir: "{app}"; Components: program\WinHost
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
@@ -52,11 +54,14 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 [Run] 
 Filename: "{app}\telegraf.exe"; Parameters: "--service install --service-name telegraf-exec --config ""{app}\telegraf-1.conf"""; Components: program\exec; Flags: runhidden
 Filename: "{app}\telegraf.exe"; Parameters: "--service install --service-name telegraf-fileexec --config ""{app}\telegraf-2.conf"""; Components: program\fileexec; Flags: runhidden
+Filename: "{app}\telegraf.exe"; Parameters: "--service install --service-name telegraf-WinHost --config ""{app}\telegraf-WinHost.conf"""; Components: program\WinHost; Flags: runhidden
 Filename: {sys}\sc.exe; Parameters: "config telegraf-exec     start= delayed-auto DisplayName= telegraf(exec)";     Components: program\exec; Flags: runhidden
 Filename: {sys}\sc.exe; Parameters: "config telegraf-fileexec start= delayed-auto DisplayName= telegraf(fileexec)"; Components: program\fileexec; Flags: runhidden
+Filename: {sys}\sc.exe; Parameters: "config telegraf-WinHost  start= delayed-auto DisplayName= telegraf(WinHost)";  Components: program\WinHost; Flags: runhidden
 
 [UninstallRun]
 Filename: "{app}\telegraf.exe"; Parameters: "--service uninstall --service-name telegraf-exec";     Components: program\exec; Flags: runhidden
 Filename: "{app}\telegraf.exe"; Parameters: "--service uninstall --service-name telegraf-fileexec"; Components: program\fileexec; Flags: runhidden
+Filename: "{app}\telegraf.exe"; Parameters: "--service uninstall --service-name telegraf-WinHost";  Components: program\WinHost; Flags: runhidden
 
 [Code]
